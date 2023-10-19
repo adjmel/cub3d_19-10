@@ -1,0 +1,77 @@
+/*TO DO LIST - PARSING*/
+
+- n'avoir que des murs qui sont face nord, sud, est, ouest sinon erreur ✅
+
+
+- Votre programme doit prendre en premier argument un fichier de description de scène avec pour extension .cub, donc si pas de .cub, = error ✅
+
+
+- La map doit être composée d’uniquement ces 6 caractères : 0 pour les espaces vides, 1 -> si pas ca dans la map = error ✅ 
+
+
+- La map doit être fermée/entourée de murs, sinon le programme doit renvoyer une erreur. 🟠
+
+
+-  Le premier mur ne peut contenir que des espaces et des 1 🟠
+
+
+- La description de la carte sera toujours en dernier dans le fichier, le reste des éléments peut être dans n’importe quel ordre. 🔴
+
+
+- les informations de chaque élément peuvent être séparées par un ou plusieurs espace(s) (sauf pour la map elle-même) 🔴
+
+
+- renvoyer une erreur si la map a des espaces ✅
+
+
+- Pour chaque élement, le premier caractère est l’identifiant (un ou deux caractères), suivi de toutes les informations spécifiques à l’élément dans un ordre strict tel que : cf sujet  🔴
+
+
+- Si un problème de configuration de n’importe quel type est rencontré dans le fichier, le programme doit quitter et renvoyer "Error\n" suivi d’un message d’erreur explicite de votre choix ✅ 
+
+
+- Identification de sections : Définissez des sections dans le fichier de configuration pour distinguer différentes catégories de données, telles que la carte, les textures, les couleurs, etc. Ces sections pourraient être délimitées par des balises ou des mots-clés spécifiques.🔴
+
+
+- Analyse des paramètres : Pour chaque section, analysez les paramètres spécifiques. Par exemple, pour la section de la carte, vous devrez extraire les données de la carte elle-même (représentation en grille).🟠
+
+
+- Stockage des données : Stockez les données analysées dans des structures de données appropriées pour les utiliser plus tard dans le jeu. 🔴
+
+
+- Données incorrectes : Les données dans le fichier de configuration ne sont pas valides. Par exemple, des caractères non autorisés peuvent être présents, ou des valeurs en dehors de la plage autorisée peuvent être spécifiées. ✅ 
+
+- Dépassement de capacité : Si le jeu a des limites sur la taille de la carte ou d'autres paramètres, ne pas vérifier ces limites peut entraîner un dépassement de capacité. 🔴
+
+
+- Ouvrir le fichier de la carte : Commencez par ouvrir le fichier contenant la description de la carte. Vous pouvez utiliser des fonctions de lecture de fichiers comme open en C ou des bibliothèques spécifiques à la gestion des fichiers en fonction de votre langage de programmation. ✅
+
+
+- Lire ligne par ligne : Lisez le fichier ligne par ligne pour obtenir les données de la carte. Vous pouvez utiliser des fonctions de lecture de fichiers pour lire une ligne à la fois. ✅
+
+
+- Analyser les données : Pour chaque ligne lue, analysez les données pour extraire les informations nécessaires. Les données peuvent être formatées de différentes manières, mais dans un format simple, chaque caractère ou nombre peut représenter un élément de la carte (par exemple, un mur, un espace vide, un ennemi, etc.). Vous devrez interpréter chaque caractère ou nombre pour créer la carte. ✅ 
+
+
+- Construire la carte en mémoire : À mesure que vous analysez les données, créez une structure de données en mémoire pour représenter la carte. Vous pouvez utiliser un tableau 2D ou une autre structure de données adaptée pour stocker les informations de la carte. Remplissez cette structure de données à mesure que vous analysez les données du fichier. ✅ 
+
+
+- Extraire les dimensions de la fenêtre et utiliser atoi pour les transformer en entiers 🟠
+
+
+- Vérifier qu'il n'y a pas plusieurs résolutions dans le cub et que les dimensions ne sont pas plus grandes que celles des ordinateurs de l'école 🟠
+
+
+- Vérifier si les valeurs RGB données sont valides (Les RGB n'ont pas 3 chiffres, sont séparés par un caractère non valide (pas une virgule) ou ont des valeurs inférieures à 0 ou supérieures à 255)  🔴
+
+
+- Renvoyer une erreur s'il n'y a pas de joueur sur la map ✅ 
+
+
+- Faire une fonction qui analyse une chaîne pour extraire les valeurs RGB du plafond (ceiling) et sol et les stocke dans une structure de données, en effectuant des vérifications en cours de route pour s'assurer que les valeurs sont valides 🔴
+
+
+- Les textures sont un fichier qui n'existe pas (la fonction d'ouverture échouerait) ou n'est pas un fichier XPM 🔴
+
+
+-  Copier la carte pour mieux utiliser les coordonnées x et y 🔴
