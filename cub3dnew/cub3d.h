@@ -15,7 +15,7 @@
 # define WINDOW_HEIGHT 600
 
 #define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
-#define MAX_MAP_SIZE_X 24 // Ajustez selon besoins
+#define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
 #define MAX_MAP_SIZE_Y 24
 
 typedef struct s_parsing
