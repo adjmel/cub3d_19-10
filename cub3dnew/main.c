@@ -9,12 +9,10 @@
 /*   Updated: 2023/10/19 17:45:11 by madjogou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "cub3d.h"
 
-gsgsdgj slQIWJROQWR0 JFI 0IWET WET2W02T E0 WET W30YW60421Y 0W10 WE 
-3 024T56E5T 0W5E1T32WE10 T3WT1 32WE.T 23
- 
-int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
+int    good_name_file_cub(int ac, char **av)//✅
 {    
     // Récupère le nom du fichier à partir du premier argument
     char *name_file;
@@ -41,7 +39,7 @@ int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
 int main(int ac, char **av)
 {
     /*bon nombre d'argument et bon nom de fichier .cub ✅*/
-    if (name_good_goud_name_fyle_cub(ac, av) == 1)
+    if (good_name_file_cub(ac, av) == 1)
             return (1);
 
     /*parsing*/
