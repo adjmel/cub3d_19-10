@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 #include "cub3d.h"
 
+gsgsdgj slQIWJROQWR0 JFI 0IWET WET2W02T E0 WET W30YW60421Y 0W10 WE 
+3 024T56E5T 0W5E1T32WE10 T3WT1 32WE.T 23
+ 
 int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
 {    
     // Récupère le nom du fichier à partir du premier argument
