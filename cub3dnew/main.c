@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "cub3d.h"
 
-int    good_name_file_cub(int ac, char **av)//✅
+int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
 {    
     // Récupère le nom du fichier à partir du premier argument
     char *name_file;
@@ -38,7 +38,7 @@ int    good_name_file_cub(int ac, char **av)//✅
 int main(int ac, char **av)
 {
     /*bon nombre d'argument et bon nom de fichier .cub ✅*/
-    if (good_name_file_cub(ac, av) == 1)
+    if (name_good_goud_name_fyle_cub(ac, av) == 1)
             return (1);
 
     /*parsing*/
