@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 #include "cub3d.h"
 
-
-// fsgs sdjg sdgn skl ngsldng lksdn glksnd glksndl gnsdng skdng sldng sldng sn gs ngs lg sg s
-sd gsd gsdlg sdm gskdm gsdmg ks gmd
-
 int    good_name_file_cub(int ac, char **av)//✅
 {    
     // Récupère le nom du fichier à partir du premier argument
