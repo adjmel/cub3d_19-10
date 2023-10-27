@@ -24,8 +24,8 @@ int check_config_elements(char **text_file, t_parsing *parsing)
             return (1);
         if (parsing_textures(text_file, parsing) == 1)
             return (1);
-        if (check_map_prefixes(text_file) == 1)
-            return (1);
+       // if (check_map_prefixes(text_file) == 1)
+          //  return (1);
     return 0;
 }
 
@@ -34,8 +34,8 @@ int parsing_cub3d(char **text_file, t_parsing *parsing)
     int i = 0;
 
     // Analyse les informations de configuration (résolution, textures, couleurs, etc.)
-    //if (check_config_elements(text_file, parsing) == 1)
-        //return (1);
+    if (check_config_elements(text_file, parsing) == 1)
+        return (1);
 
     //mettre la map dans une autre structure pour la traiter et que les deux
     //ne se melange pas

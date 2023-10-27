@@ -1,5 +1,6 @@
 #include "cub3d.h"
 
+//pour voir si la map a des caracteres correctes
 int correct_number(char **text_file) 
 {
     char *player_chars = "NSEW";
@@ -36,12 +37,10 @@ int correct_number(char **text_file)
                     printf("Error : %c this direction does not exist\n", current_char);
                     return 1;
                 }
-                //printf("Error %c : this element does not exist\n", current_char);
             }
 
             if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL) 
             {
-                //Error: - is not a correct number
                 printf("Error: %c is not a correct number\n", current_char);
                 return 1;
             }
@@ -51,6 +50,16 @@ int correct_number(char **text_file)
         num_lines++;
     }
     return 0;
+}
+
+// Fonction pour supprimer les espaces au début d'une chaîne
+char *trim_left(char *str) 
+{
+    while (*str != '\0' && (*str == ' ' || *str == '\t')) 
+    {
+        str++;
+    }
+    return str;
 }
 
 // Fonction pour vérifier si la carte est correctement fermée, même si elle n'est pas carrée
@@ -67,82 +76,7 @@ int correct_number(char **text_file)
 
     // Allouez de la mémoire pour stocker la longueur de chaque ligne
     line_lengths = (unsigned long*)malloc(map_height * sizeof(unsigned long));
-    if (line_lengths == NULL) 
-    {
-        printf("Error: Memory allocation failed\n");
-        return 1;
-    }
-
-    // Calculez la largeur maximale de la carte et stockez la longueur de chaque ligne
-    for (unsigned long i = 0; i < map_height; i++) 
-    {
-        line_lengths[i] = strlen(map[i]);
-
-    }
-    
-    // Parcourez chaque ligne de la carte
-    for (unsigned long i = 0; i < map_height; i++) 
-    {
-        unsigned long current_line_length = line_lengths[i];
-
-        // Parcourez la ligne
-        for (unsigned long j = 0; j < current_line_length; j++) 
-        {
-            // Vérifiez les bords supérieur et inférieur
-            if (i == 0 || i == map_height - 1) 
-            {
-                if (map[i][j] != '1') 
-                {
-                    printf("Error: The upper/lower edge of the wall is not closed\n");
-                    free(line_lengths);
-                    return 1;
-                }
-            }
-
-            // Vérifiez les bords gauche et droit
-            if (j == 0 || j == current_line_length - 1) 
-            {
-                if (map[i][j] != '1') 
-                {
-                    printf("Error: The left/right edge of the wall is not closed\n");
-                    free(line_lengths);
-                    return 1;
-                }
-            }
-        }
-    }
-
-    free(line_lengths);
-
-    // Si tous les bords sont corrects et que la carte est correctement fermée, retournez 0
-    return 0;
-}*/
-
-// Fonction pour supprimer les espaces au début d'une chaîne
-char *trim_left(char *str) 
-{
-    while (*str != '\0' && (*str == ' ' || *str == '\t')) 
-    {
-        str++;
-    }
-    return str;
-}
-
-// Fonction pour vérifier si la carte est correctement fermée, même si elle n'est pas carrée
-int map_closed(char **map) 
-{
-    unsigned long map_height = 0;
-    unsigned long *line_lengths = NULL;
-
-    // Calculez la hauteur de la carte en parcourant le tableau
-    while (map[map_height] != NULL) 
-    {
-        map_height++;
-    }
-
-    // Allouez de la mémoire pour stocker la longueur de chaque ligne
-    line_lengths = (unsigned long*)malloc(map_height * sizeof(unsigned long));
-    if (line_lengths == NULL) 
+    if (!line_lengths) 
     {
         printf("Error: Memory allocation failed\n");
         return 1;
@@ -196,6 +130,82 @@ int map_closed(char **map)
     free(line_lengths);
     // Si tous les bords sont corrects et que la carte est correctement fermée, retournez 0
     return 0;
+}*/
+
+int map_closed(char **map) 
+{
+    unsigned long map_height = 0;
+    unsigned long *line_lengths = NULL;
+
+    // Calculez la hauteur de la carte en parcourant le tableau
+    while (map[map_height] != NULL) 
+    {
+        map_height++;
+    }
+
+    // Allouez de la mémoire pour stocker la longueur de chaque ligne
+    line_lengths = (unsigned long*)malloc(map_height * sizeof(unsigned long));
+    if (!line_lengths) 
+    {
+        printf("Error: Memory allocation failed\n");
+        return 1;
+    }
+
+    // Calculez la largeur maximale de la carte et stockez la longueur de chaque ligne
+    unsigned long i = 0;
+    while (i < map_height) 
+    {
+        // Utilisez la fonction trim_left pour supprimer les espaces au début de la ligne
+        map[i] = trim_left(map[i]);
+
+        line_lengths[i] = strlen(map[i]);
+        if (line_lengths[i] == 0) 
+        {
+            // Si la ligne est vide après le nettoyage des espaces, ignorez-la
+            i++;
+            continue;
+        }
+        i++;
+    }
+    
+    // Parcourez chaque ligne de la carte
+    i = 0;
+    while (i < map_height) 
+    {
+        unsigned long current_line_length = line_lengths[i];
+
+        // Parcourez la ligne
+        unsigned long j = 0;
+        while (j < current_line_length) 
+        {
+            // Vérifiez les bords supérieur et inférieur
+            if (i == 0 || i == map_height - 1) 
+            {
+                if (map[i][j] != '1') 
+                {
+                    printf("Error: The upper/lower edge of the wall is not closed\n");
+                    free(line_lengths);
+                    return 1;
+                }
+            }
+
+            // Vérifiez les bords gauche et droit
+            if (j == 0 || j == current_line_length - 1) 
+            {
+                if (map[i][j] != '1') 
+                {
+                    printf("Error: The left/right edge of the wall is not closed\n");
+                    free(line_lengths);
+                    return 1;
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+    free(line_lengths);
+    // Si tous les bords sont corrects et que la carte est correctement fermée, retournez 0
+    return 0;
 }
 
 int map_less_3_lines(char **text_file)
@@ -203,7 +213,7 @@ int map_less_3_lines(char **text_file)
     int num_lines = 0;
 
     // Compter le nombre de lignes dans le fichier
-    while (text_file[num_lines] != NULL) 
+    while (text_file[num_lines] != NULL)
     {
         num_lines++;
     }
@@ -254,14 +264,10 @@ int check_nbr_player(char **text_file)
 }
 
 /* Copie la carte d'origine dans une nouvelle structure de données 
-pour une utilisation plus aisée des coordonnées x et y. */
+pour une utilisation plus aisée des coordonnées x et y*/
 int put_map_in_struct(t_parsing *parsing)
 {
-    // Vérifiez si la carte d'origine n'est pas vide
-    if (parsing->text_file == NULL || parsing->text_file[0] == NULL) 
-        return 1;
-
-    // Obtenez la hauteur de la carte en comptant le nombre de lignes
+    // Obtenez la hauteur de la carte en comptant le nombre de ligne
     int map_height = 0;
     while (parsing->text_file[map_height] != NULL) 
     {
@@ -270,7 +276,7 @@ int put_map_in_struct(t_parsing *parsing)
 
     // Allouez de la mémoire pour la nouvelle structure de données
     parsing->copied_map = (char **)malloc(sizeof(char *) * (map_height + 1));
-    if (parsing->copied_map == NULL) 
+    if (!parsing->copied_map) 
     {
         return 1;
     }
@@ -281,7 +287,7 @@ int put_map_in_struct(t_parsing *parsing)
     {
         parsing->copied_map[i] = strdup(parsing->text_file[i]);
         
-        if (parsing->copied_map[i] == NULL) 
+        if (!parsing->copied_map[i]) 
         { 
             // En cas d'erreur, libérez la mémoire précédemment allouée et retournez 0
             int j = 0;
@@ -300,9 +306,9 @@ int put_map_in_struct(t_parsing *parsing)
     parsing->copied_map[map_height] = NULL;
     
     // Mettez à jour la hauteur de la carte copiée
-    parsing->map_height = map_height;
- 
+    //parsing->map_height = map_height;
+
     //printf("mp = %d\n", parsing->map_height);
     //printf("cp = %s\n", parsing->copied_map[1]);
-    return 0; // Succès
+    return 0;
 }

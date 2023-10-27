@@ -10,6 +10,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <X11/Xlib.h>
+# include <ctype.h>
 
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 600
