@@ -10,6 +10,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <X11/Xlib.h>
+# include <ctype.h>
 
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 600
@@ -36,12 +37,19 @@ typedef struct s_parsing
 	int r_value_y;
 
 	/*valeurs pour les textures*/
+	char *no_texture_value;
+    char *so_texture_value;
+    char *we_texture_value;
+    char *ea_texture_value;
+    char *s_texture_value;
+
+	/*map*/
+	char **map;
+	char **copied_map;
+	int map_height;
 
 	/*position x et y du player*/
 	//int
-
-	/*map*/
-	//char **map;
 
 	/*distances horizontale et verticale*/
 	//float;
@@ -74,15 +82,17 @@ int check_no_wall();
 int map_closed();
 int map_less_3_lines();
 int check_nbr_player();
+int correct_number(char **text_file);
 
 void    init_textures(t_parsing *parsing);
 int parsing(char *file_cub3d_name);
 int parsing_rgbs();
 int parsing_resolution();
 int parsing_textures();
-int parsing_nbr_map();
+int check_map_prefixes();
 int parsing_cub3d(char **text_file, t_parsing *parsing);
 int put_text_struct();
+int put_map_in_struct(t_parsing *parsing);
 
 /*EXECUTION*/
 

@@ -1,17 +1,28 @@
 #include "cub3d.h"
 
-
 void	init_struct(t_parsing	*parsing)
 {
     parsing->text_file = NULL;
     
     // Initialisation des valeurs RGB dans la structure
-    parsing->floor_value_1 = -1;  // Valeur par défaut
+    parsing->floor_value_1 = -1;  // Valeur par défaut -> mettre 0 ?
     parsing->floor_value_2 = -1;  // Valeur par défaut
     parsing->floor_value_3 = -1;  // Valeur par défaut
     parsing->sky_value_1 = -1;  // Valeur par défaut
     parsing->sky_value_2 = -1;  // Valeur par défaut
     parsing->sky_value_3 = -1;  // Valeur par défaut
+
+    //init textures
+    parsing->no_texture_value = NULL;
+    parsing->we_texture_value = NULL;
+    parsing->so_texture_value = NULL;
+    parsing->ea_texture_value = NULL;
+    parsing->s_texture_value = NULL;
+
+    //init map
+    parsing->map = NULL;
+	parsing->copied_map = NULL;
+	parsing->map_height = 0;
 
     //ETC
 }
@@ -20,7 +31,7 @@ int parsing(char *file_cub3d_name)
 {
     t_parsing *parsing;
     int fd = open(file_cub3d_name, O_RDONLY);
-    t_data	data;
+    t_data	data; //sert a rien en vrai
 
     init_struct(&data.parsing);
 

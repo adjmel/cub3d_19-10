@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-// Fonction pour lire les lignes du fichier et stocker les données dans text
+// Fonction pour lire les lignes du fichier et stocker les données dans text -> possible d'utiliser gnl
 int read_file(int fd, char ***text, int *num_lines) 
 {
     char buffer[MAX_LINE_LENGTH];
@@ -8,20 +8,21 @@ int read_file(int fd, char ***text, int *num_lines)
     char current_char;
     int line_index = 0;
 
-    // Allouer de la mémoire pour *text
+    //Allouer de la mémoire pour *text -> ATTENTION VALEUR FIXE A CHANGER car segfault a 100, allouer dynamiquement
     *text = (char **)malloc(100 * sizeof(char *));
     if (!*text) 
     {
         printf("Error: Memory allocation failed\n");
         return 1;
     }
+
     while ((bytes_read = read(fd, &current_char, 1)) > 0) 
     {
         if (current_char == '\n') 
         {
             buffer[line_index] = '\0'; // Ajoutez une terminaison nulle à la fin de la ligne
             (*text)[*num_lines] = strdup(buffer); // Copie de la ligne dans text
-            if ((*text)[*num_lines] == NULL) 
+            if (!(*text)[*num_lines]) 
             {
                 printf("Error: Memory allocation failed\n");
                 return 1;
@@ -36,7 +37,7 @@ int read_file(int fd, char ***text, int *num_lines)
         } 
         else 
         {
-            printf("Error: Line too long\n");
+            printf("Error: Line too long\n"); //au cas ou on met une ligne beaucoup trop longue de le fichier
             break;
         }
     }
@@ -44,7 +45,7 @@ int read_file(int fd, char ***text, int *num_lines)
     {
         buffer[line_index] = '\0'; // Ajoutez une terminaison nulle à la fin de la ligne
         (*text)[*num_lines] = strdup(buffer); // Copie de la dernière ligne
-        if ((*text)[*num_lines] == NULL) 
+        if (!(*text)[*num_lines]) 
         {
             printf("Error: Memory allocation failed\n");
             return 1;
@@ -73,7 +74,7 @@ int put_text_struct(t_parsing *parsing)
         printf("Error: Failed to read the file\n");
         return 1;
     } 
-        //printf("text[9] = %s\n", parsing->text_file[9]); // Affiche la 10e ligne (indice 9) du fichier
+    //printf("text[9] = %s\n", parsing->text_file[9]); // Affiche la 10e ligne (indice 9) du fichier
 
     //free a garder ?
     /*int i = 0;
