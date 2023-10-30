@@ -154,7 +154,7 @@ int parse_resolution(char *str, int *width, int *height)
 
         // Si plus de 2 résolution trouvées, renvoyer une erreur 
         // attention ! prends les espaces 
-        if (i >= 2) 
+        if (i > 2) 
         {
             printf("Error: Multiple resolutions in the file\n");
             return 1; // Résolution invalide
@@ -202,8 +202,8 @@ int parsing_resolution(char **text_file, t_parsing *parsing)
                     // La résolution est valide
                     parsing->r_value_x = r_x;
                     parsing->r_value_y = r_y;
-                   //printf("r_x = %d\n",  parsing->r_value_x);
-                    //printf("r_x = %d\n", parsing->r_value_y);
+                    // printf("r_x = %d\n",  parsing->r_value_x);
+                    // printf("r_x = %d\n", parsing->r_value_y);
                     return 0;  // Résolution valide trouvée
                 }
             }
@@ -212,7 +212,7 @@ int parsing_resolution(char **text_file, t_parsing *parsing)
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Erreur : Incorrect or undefined resolution\n");
-    return 1;
+    return 0;
 }
 
 int parsing_textures()

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madjogou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:44:10 by madjogou          #+#    #+#             */
-/*   Updated: 2023/10/19 17:44:11 by madjogou         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:07:45 by parallels        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "cub3d.h"
 
 int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
@@ -37,12 +38,18 @@ int    name_good_goud_name_fyle_cub(int ac, char **av)//✅
 
 int main(int ac, char **av)
 {
+    t_data	data;
+
     /*bon nombre d'argument et bon nom de fichier .cub ✅*/
     if (name_good_goud_name_fyle_cub(ac, av) == 1)
             return (1);
 
     /*parsing*/
-    if (parsing(av[1]) == 1)
+    if (parsing(av[1], &data) == 1)
+        return (1);
+
+    /*init window*/
+    if (init_window(data) == 1)
         return (1);
 
     /*execution*/

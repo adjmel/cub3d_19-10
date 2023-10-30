@@ -1,6 +1,6 @@
 NAME		= cub3d
 
-SRC 		= main.c parsing1.c put_text_struct.c parsing2.c parsing_map_elements.c check_config_elements.c
+SRC 		= main.c parsing1.c put_text_struct.c parsing2.c parsing_map_elements.c check_config_elements.c start_window.c
 
 CC 			= cc 
 

@@ -16,20 +16,19 @@ void	init_struct(t_parsing	*parsing)
     //ETC
 }
 
-int parsing(char *file_cub3d_name)
+int parsing(char *file_cub3d_name, t_data *data)
 {
     t_parsing *parsing;
     int fd = open(file_cub3d_name, O_RDONLY);
-    t_data	data;
 
-    init_struct(&data.parsing);
+    init_struct(&data->parsing);
 
     //parsing pointe vers la même structure que data.parsing
-    parsing = &data.parsing;
+    parsing = &data->parsing;
     if (fd != -1)
         {
         // Le fichier existe.
-        if (put_text_struct(&data.parsing) == 1)
+        if (put_text_struct(&data->parsing) == 1)
         {
             printf("Error : text cannot be put into structure\n");
             return 1;
@@ -41,7 +40,7 @@ int parsing(char *file_cub3d_name)
             return 1;
         }
        // printf("ici = %s\n", parsing->text_file[9]);
-        if (parsing_cub3d(parsing->text_file, &data.parsing) == 1)
+        if (parsing_cub3d(parsing->text_file, &data->parsing) == 1)
         {
             //faire mes frees si parsing errone
             return 1;
