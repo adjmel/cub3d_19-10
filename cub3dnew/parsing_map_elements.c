@@ -1,4 +1,4 @@
-#include "cub3d.h"
+z#include "cub3d.h"
 
 int check_no_wall()
 {
