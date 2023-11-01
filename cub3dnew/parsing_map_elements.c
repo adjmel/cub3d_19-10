@@ -1,19 +1,23 @@
 #include "cub3d.h"
 
 //pour voir si la map a des caracteres correctes
-int correct_number(char **text_file) 
+int correct_number(t_parsing *parsing) 
 {
-    char *player_chars = "NSEW";
+    char *player_chars = "NSEWO";
 
     int num_lines = 0;
-    while (text_file[num_lines] != NULL) 
+    int start = parsing->start_map;
+    while (parsing->map[start] != NULL) 
     {
-        char *line = text_file[num_lines];
+        char *line = parsing->map[start];
         size_t i = 0;
-        while (line[i] != '\0') 
+
+        while (line[i] == ' ')
+                     i++;
+        while (line[i] != '\0')
         {
             char current_char = line[i];
-
+            //printf("ici = %c\n", current_char);
             // Vérifiez les caractères spéciaux
             if (current_char == '\n' || current_char == '\t' || current_char == '\r' ||
                 current_char == '\v' || current_char == '\f')
@@ -22,15 +26,15 @@ int correct_number(char **text_file)
                 i++;
                 continue;
             }
-
-            // Vérifiez les espaces
-            if (current_char == ' ') 
+            // Vérifiez les espaces -> dernier lignes 
+            // + changer car space possibl au debut
+            if (current_char == ' ')
             {
                 printf("Error: Do not put spaces in the map\n");
                 return 1;
             }
 
-            if (strchr(player_chars, current_char) == NULL) 
+            if (strchr(player_chars, current_char) == NULL)
             {
                 if (current_char >= 'A' && current_char <= 'Z')
                 {
@@ -39,7 +43,7 @@ int correct_number(char **text_file)
                 }
             }
 
-            if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL) 
+            if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL)
             {
                 printf("Error: %c is not a correct number\n", current_char);
                 return 1;
@@ -48,106 +52,147 @@ int correct_number(char **text_file)
             i++;
         }
         num_lines++;
+        start++;
     }
     return 0;
 }
 
-// Fonction pour supprimer les espaces au début d'une chaîne
-char *trim_left(char *str) 
+int		check_spaces(char c)
 {
-    while (*str != '\0' && (*str == ' ' || *str == '\t')) 
-    {
-        str++;
-    }
-    return str;
+	if (c > 9 && c < 13)
+		return (1);
+	return (0);
 }
 
-// Fonction pour vérifier si la carte est correctement fermée, même si elle n'est pas carrée
-int map_closed(char **map) 
+int check_wall(char **strs, int i, int j)
 {
-    unsigned long map_height = 0;
-    unsigned long *line_lengths = NULL;
+    if (strs[i][j - 1] == 0 || check_spaces(strs[i][j - 1]))
+        return (1);
 
-    // Calculez la hauteur de la carte en parcourant le tableau
-    while (map[map_height] != NULL) 
+    if (strs[i][j + 1] == 0 || check_spaces(strs[i][j + 1]))
+        return (1);
+
+    if (strs[i - 1][j] == 0 || check_spaces(strs[i - 1][j]))
+        return (1);
+
+    if (strs[i + 1][j] == 0 || check_spaces(strs[i + 1][j]))
+        return (1);
+
+    return 0; // Tous les côtés sont fermés
+}
+
+
+int check_all_wall_closed(t_parsing *parsing, int start_map) 
+{
+    int i = start_map + 1; //car premiere ligne deja traitee
+    //mais attention car ne verifie pas le dernier mur
+    int j;
+    char **map = parsing->map;
+
+    while (map[i] != NULL)
     {
-        map_height++;
+        //printf("ici = %s\n", map[i]);
+        j = 0;
+        while (map[i][j] != '\0') 
+        {
+            //printf("ici = %c\n", map[i][j]);
+            if (map[i][j] == '0' || map[i][j] == '2' ||
+            map[i][j] == 'N' || map[i][j] == 'S' ||
+            map[i][j] == 'E' || map[i][j] == 'W' || map[i][j] == 'O')
+            {
+                //printf("je suis different = %c\n", map[i][j]);
+                if (check_wall(map, i, j) == 1)
+                {
+                    printf("Error: The walls are not closed\n");
+                    return 1;
+                }
+            }           
+            j++;
+        }
+        
+        i++;
+    }
+    return 0;
+}
+
+
+int check_last_wall(t_parsing *parsing)
+{
+    int index_end = parsing->start_map; // Pointe vers la première ligne de la carte
+
+    while (parsing->map[index_end] != NULL)
+    {
+        index_end++; // Avance jusqu'à la fin de la carte
     }
 
-    // Allouez de la mémoire pour stocker la longueur de chaque ligne
-    line_lengths = (unsigned long*)malloc(map_height * sizeof(unsigned long));
-    if (!line_lengths) 
+    index_end--; // Revenir à la dernière ligne de la carte
+
+    char *map_line = parsing->map[index_end];
+    int j = 0;
+
+    while (map_line[j] != '\0')
     {
-        printf("Error: Memory allocation failed\n");
+        //printf("%c\n", map_line[j]);
+        if (map_line[j] != '1' && map_line[j] != ' ')
+        {
+            
+            printf("Error: Last wall is not closed = %c\n", map_line[j]);
+            return 1;
+        }
+        j++;
+    }
+    return 0;
+}
+
+int check_first_wall(t_parsing *parsing)
+{
+    int i = parsing->start_map;
+    char *map_line = parsing->map[i];
+
+    if (map_line == NULL) {
+        printf("Error:  is not closed\n");
         return 1;
     }
 
-    // Calculez la largeur maximale de la carte et stockez la longueur de chaque ligne
-    unsigned long i = 0;
-    while (i < map_height) 
+    int j = 0;
+    while (map_line[j] != '\0')
     {
-        // Utilisez la fonction trim_left pour supprimer les espaces au début de la ligne
-        map[i] = trim_left(map[i]);
-
-        line_lengths[i] = strlen(map[i]);
-        if (line_lengths[i] == 0) 
+        if (map_line[j] != '1' && map_line[j] != ' ')
         {
-            // Si la ligne est vide après le nettoyage des espaces, ignorez-la
-            i++;
-            continue;
+            printf("Error: First wall is not closed\n");
+            return 1;
         }
-        i++;
+        j++;
     }
-    
-    // Parcourez chaque ligne de la carte
-    i = 0;
-    while (i < map_height) 
-    {
-        unsigned long current_line_length = line_lengths[i];
-
-        // Parcourez la ligne
-        unsigned long j = 0;
-        while (j < current_line_length) 
-        {
-            // Vérifiez les bords supérieur et inférieur
-            if (i == 0 || i == map_height - 1) 
-            {
-                if (map[i][j] != '1') 
-                {
-                    printf("Error: The upper/lower edge of the wall is not closed\n");
-                    free(line_lengths);
-                    return 1;
-                }
-            }
-
-            // Vérifiez les bords gauche et droit
-            if (j == 0 || j == current_line_length - 1) 
-            {
-                if (map[i][j] != '1') 
-                {
-                    printf("Error: The left/right edge of the wall is not closed\n");
-                    free(line_lengths);
-                    return 1;
-                }
-            }
-            j++;
-        }
-        i++;
-    }
-    free(line_lengths);
-    // Si tous les bords sont corrects et que la carte est correctement fermée, retournez 0
     return 0;
 }
 
-int map_less_3_lines(char **text_file)
-{
-    int num_lines = 0;
 
-    // Compter le nombre de lignes dans le fichier
-    while (text_file[num_lines] != NULL)
+int map_closed(t_parsing *parsing)
+{
+    if (check_first_wall(parsing) == 1)
+        return 1;
+    if (check_last_wall(parsing) == 1)
+        return 1;
+    if (check_all_wall_closed(parsing, parsing->start_map) == 1)
+        return 1;
+    return 0;
+}
+
+int map_less_3_lines(t_parsing *parsing) 
+{
+    //printf("start map = %d\n", parsing->start_map);
+    //printf("result start map = %s\n", parsing->map[parsing->start_map]);
+
+    int num_lines = 0;
+    int start = parsing->start_map;
+    while (parsing->map[start] != NULL) 
     {
         num_lines++;
+        start++; // Avance au prochain élément de parsing->map
     }
+
+    //printf("Nombre total de lignes : %d\n", num_lines);
 
     if (num_lines <= 3) 
     {
@@ -157,14 +202,16 @@ int map_less_3_lines(char **text_file)
     return 0;
 }
 
-int check_nbr_player(char **text_file) 
+int check_nbr_player(t_parsing *parsing) 
 {
-    int num_lines = 0;
+    //int num_lines = 0;
     int player_count = 0;
-    while (text_file[num_lines] != NULL) 
+
+    int start = parsing->start_map;
+    while (parsing->map[start] != NULL) 
     {
-        char *line = text_file[num_lines];
-        char *player_chars = "NSEW";
+        char *line = parsing->map[start];
+        char *player_chars = "N";
 
         size_t i = 0; // Utilisez size_t pour éviter l'erreur de signe
         while (i < strlen(player_chars)) 
@@ -172,6 +219,7 @@ int check_nbr_player(char **text_file)
             if (strchr(line, player_chars[i]) != NULL) 
             {
                 player_count++;
+                //printf("ici = %d\n", player_count);
                 if (player_count > 1) 
                 {
                     printf("Error: There is more than one player on the map\n");
@@ -184,7 +232,8 @@ int check_nbr_player(char **text_file)
                 i++;
             }
         }
-        num_lines++;
+        //num_lines++;
+        start++;
     }
     if (player_count == 0)
     {
@@ -194,29 +243,70 @@ int check_nbr_player(char **text_file)
     return 0;
 }
 
-/* Copie la carte d'origine dans une nouvelle structure de données 
+int check_nbr_directions(t_parsing *parsing) 
+{
+    //int num_lines = 0;
+    int destination_count = 0;
+
+    int start = parsing->start_map;
+    while (parsing->map[start] != NULL) 
+    {
+        char *line = parsing->map[start];
+        char *destination_chars = "SWOE";
+
+        size_t i = 0; // Utilisez size_t pour éviter l'erreur de signe
+        while (i < strlen(destination_chars)) 
+        {
+            if (strchr(line, destination_chars[i]) != NULL) 
+            {
+                destination_count++;
+                if (destination_count > 1) 
+                {
+                    printf("Error: There is more than one direction on the map\n");
+                    return 1;
+                }
+                i++;
+            }
+            else 
+            {
+                i++;
+            }
+        }
+        //num_lines++;
+        start++;
+    }
+    if (destination_count == 0)
+    {
+        printf("Error: There is no destination on the map\n");
+        return 1;
+    }
+    return 0;
+}
+
+/*Copie la carte d'origine dans une nouvelle structure de données 
 pour une utilisation plus aisée des coordonnées x et y*/
-int put_map_in_struct(t_parsing *parsing)
+/*int put_map_in_struct(t_parsing *parsing)
 {
     // Obtenez la hauteur de la carte en comptant le nombre de ligne
+    int index = parsing->start_map;
     int map_height = 0;
-    while (parsing->text_file[map_height] != NULL) 
+    while (parsing->map[index] != NULL) 
     {
-        map_height++;
+        map_height++; 
+        index++;  
     }
+    printf("map height = %d\n", map_height);
 
     // Allouez de la mémoire pour la nouvelle structure de données
     parsing->copied_map = (char **)malloc(sizeof(char *) * (map_height + 1));
     if (!parsing->copied_map) 
-    {
         return 1;
-    }
     
     int i = 0;
     // Copiez chaque ligne de la carte dans la nouvelle structure
     while (i < map_height) 
     {
-        parsing->copied_map[i] = strdup(parsing->text_file[i]);
+        parsing->copied_map[i] = strdup(parsing->map[i]);
         
         if (!parsing->copied_map[i]) 
         { 
@@ -237,9 +327,10 @@ int put_map_in_struct(t_parsing *parsing)
     parsing->copied_map[map_height] = NULL;
     
     // Mettez à jour la hauteur de la carte copiée
-    //parsing->map_height = map_height;
+    parsing->map_height = map_height;
 
     //printf("mp = %d\n", parsing->map_height);
-    //printf("cp = %s\n", parsing->copied_map[1]);
+    printf("cp = %s\n", parsing->copied_map[15]);
     return 0;
-}
+}*/
+

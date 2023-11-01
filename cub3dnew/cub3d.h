@@ -45,8 +45,13 @@ typedef struct s_parsing
 
 	/*map*/
 	char **map;
+	char **config_elements;
+
 	char **copied_map;
 	int map_height;
+
+	
+	int start_map;
 
 	/*position x et y du player*/
 	//int
@@ -80,9 +85,12 @@ typedef struct s_data
 /*PARSING*/
 int check_no_wall();
 int map_closed();
+
+int check_all_wall_closed();
+
 int map_less_3_lines();
 int check_nbr_player();
-int correct_number(char **text_file);
+int correct_number();
 
 void    init_textures(t_parsing *parsing);
 int parsing(char *file_cub3d_name);
@@ -93,8 +101,24 @@ int check_map_prefixes();
 int parsing_cub3d(char **text_file, t_parsing *parsing);
 int put_text_struct();
 int put_map_in_struct(t_parsing *parsing);
+int check_nbr_directions(t_parsing *parsing); 
 
 /*EXECUTION*/
+
+/*GNL*/
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 7
+# endif
+
+char		*ft_copy_before(char *buffer);
+char		*ft_copy_after(char *buffer);
+char		*ft_read_my_varstatic(int fd, char *varstatic);
+char		*get_next_line(int fd);
+char		*ft_strdup(const char *s1);
+char		*ft_strjoin(char *s1, char *s2);
+int			ft_search_newline(char *varstatic);
+size_t		ft_strlen(const char *s);
+int			ft_lenbuffern(char *buffer);
 
 
 #endif
