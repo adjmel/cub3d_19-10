@@ -46,13 +46,13 @@ int parsing(char *file_cub3d_name)
             return 1;
         }
         // Vérifiez si parsing->text_file a été correctement initialisé
-        if (!parsing->text_file) 
+        if (!parsing->map || !parsing->config_elements) 
         {
-            printf("Error: text_file is not properly initialized\n");
+            printf("Error: struct is not properly initialized\n");
             return 1;
         }
-       // printf("ici = %s\n", parsing->text_file[9]);
-        if (parsing_cub3d(parsing->text_file, &data.parsing) == 1)
+        // printf("ici = %s\n", parsing->text_file[9]);
+        if (parsing_cub3d(parsing->config_elements, &data.parsing) == 1)
         {
             //faire mes frees si parsing errone
             return 1;

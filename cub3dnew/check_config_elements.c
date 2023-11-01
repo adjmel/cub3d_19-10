@@ -53,12 +53,12 @@ int parse_rgb(char *str, int *r, int *g, int *b)
             // Ignorer les espaces après la résolution
             while (str[index] == ' ')
                 index++;
-        } 
-        else 
-        {
-            printf("Error : Caractère non numérique trouvé\n");
+    } 
+    else 
+    {
+            printf("Error : Caractère non numérique trouvé = %c\n", str[index]);
             return 1;
-        }
+    }
     return 0;
 }
 
@@ -227,7 +227,6 @@ int parsing_resolution(char **text_file, t_parsing *parsing)
     return 1;
 }
 
-// a recoder, difficile a comprendre
 int extension_compare(const char *text_file, const char *extension) 
 {
     int text_file_len = strlen(text_file);
@@ -255,7 +254,6 @@ int extension_compare(const char *text_file, const char *extension)
         return 0;
     return 1;
 }
-
 
 int check_texture_value(char **text_file, char *name_texture) 
 {
