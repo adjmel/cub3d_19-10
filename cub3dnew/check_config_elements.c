@@ -56,7 +56,7 @@ int parse_rgb(char *str, int *r, int *g, int *b)
     } 
     else 
     {
-            printf("Error : Caractère non numérique trouvé = %c\n", str[index]);
+            printf("Error : Non-numeric character found\n");
             return 1;
     }
     return 0;
@@ -136,7 +136,6 @@ int parsing_rgbs(char **text_file, t_parsing *parsing)
         return 1;
     if (parsing_rgbs_sky(text_file, parsing) == 1)
         return 1;
-
 return 0;
 }
 
@@ -159,21 +158,18 @@ int parse_resolution(char *str, int *width, int *height)
             {
                
                 index++;
-            }
-            
+            }           
         } 
         else 
         {
             printf("Error : Non-numeric character found\n");
             return 1;
         }
-
         if (i > 2) 
         {
             printf("Error: Multiple resolutions in the file\n");
             return 1; // Résolution invalide
         }
-
         if (str[index] == ' ' || str[index] == '\0') 
         {
             // Passer au caractère suivant après l'espace ou à la fin de la chaîne
@@ -308,15 +304,14 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
                     i = i + 2; // Sauter "NO"
                     // i pointe maintenant au début du chemin de la texture
                     parsing->s_texture_value = strdup(&text_file[line_index][i]);
-                    if (!parsing->s_texture_value)
-                        return 1; // Échec de l'allocation de mémoire
-
-                    //printf("ici = %s\n", parsing->s_texture_value);
-
-                    /*if (open(parsing->s_texture_value, O_RDONLY) < 0) {
-                        free(parsing->s_texture_value); // Libérez la mémoire en cas d'échec
-                        return 1; // Échec de l'ouverture du fichier
-                    }*/
+                    
+                    // int fd = open(parsing->s_texture_value, O_RDONLY);
+                    // if (fd < 0 || !parsing->s_texture_value) 
+                    // {
+                    //     free(parsing->s_texture_value);
+                    //     printf("Error: Failed to open the file\n");
+                    //     return 1;
+                    // }
                     return 0;
                 }
             } 
@@ -329,7 +324,7 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
         line_index++;  // Incrément de l'index
     }
     // Si aucune résolution valide n'a été trouvée
-    printf("Error : NO texture value is invalid\n");
+    printf("Error : S texture value is invalid\n");
     return 1;
 }
 
@@ -355,15 +350,15 @@ int check_ea_texture_value(char **text_file, t_parsing *parsing)
                     i = i + 2; // Sauter "EA"
                     // i pointe maintenant au début du chemin de la texture
                     parsing->ea_texture_value = strdup(&text_file[line_index][i]);
-                    if (!parsing->ea_texture_value)
-                        return 1; // Échec de l'allocation de mémoire
 
+                    // int fd = open(parsing->ea_texture_value, O_RDONLY);
+                    // if (fd < 0 || !parsing->ea_texture_value) 
+                    // {
+                    //     free(parsing->ea_texture_value);
+                    //     printf("Error: Failed to open the file\n");
+                    //     return 1;
+                    // }
                     //printf("ici = %s\n", parsing->no_texture_value);
-
-                    /*if (open(parsing->ea_texture_value, O_RDONLY) < 0) {
-                        free(parsing->ea_texture_value); // Libérez la mémoire en cas d'échec
-                        return 1; // Échec de l'ouverture du fichier
-                    }*/
                     return 0;
                 }
             } 
@@ -402,15 +397,14 @@ int check_we_texture_value(char **text_file, t_parsing *parsing)
                     i = i + 2; // Sauter "WE"
                     // i pointe maintenant au début du chemin de la texture
                     parsing->we_texture_value = strdup(&text_file[line_index][i]);
-                    if (!parsing->we_texture_value)
-                        return 1; // Échec de l'allocation de mémoire
-
-                    //printf("ici = %s\n", parsing->we_texture_value);
-
-                    /*if (open(parsing->we_texture_value, O_RDONLY) < 0) {
-                        free(parsing->we_texture_value); // Libérez la mémoire en cas d'échec
-                        return 1; // Échec de l'ouverture du fichier
-                    }*/
+                    
+                    // int fd = open(parsing->we_texture_value, O_RDONLY);
+                    // if (fd < 0 || !parsing->we_texture_value) 
+                    // {
+                    //     free(parsing->we_texture_value);
+                    //     printf("Error: Failed to open the file\n");
+                    //     return 1;
+                    // }
                     return 0;
                 }
             } 
@@ -449,15 +443,14 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
                     i = i + 2; // Sauter "NO"
                     // i pointe maintenant au début du chemin de la texture
                     parsing->so_texture_value = strdup(&text_file[line_index][i]);
-                    if (!parsing->so_texture_value)
-                        return 1; // Échec de l'allocation de mémoire
-
-                    //printf("ici = %s\n", parsing->so_texture_value);
-
-                    /*if (open(parsing->so_texture_value, O_RDONLY) < 0) {
-                        free(parsing->so_texture_value); // Libérez la mémoire en cas d'échec
-                        return 1; // Échec de l'ouverture du fichier
-                    }*/
+                    
+                    // int fd = open(parsing->so_texture_value, O_RDONLY);
+                    // if (fd < 0 || !parsing->so_texture_value) 
+                    // {
+                    //     free(parsing->so_texture_value);
+                    //     printf("Error: Failed to open the file\n");
+                    //     return 1;
+                    // }
                     return 0;
                 }
             } 
@@ -496,15 +489,15 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
                     i = i + 2; // Sauter "NO"
                     // i pointe maintenant au début du chemin de la texture
                     parsing->no_texture_value = strdup(&text_file[line_index][i]);
-                    if (!parsing->no_texture_value)
-                        return 1; // Échec de l'allocation de mémoire
-
-                    //printf("ici = %s\n", parsing->no_texture_value);
-
-                    /*if (open(parsing->no_texture_value, O_RDONLY) < 0) {
-                        free(parsing->no_texture_value); // Libérez la mémoire en cas d'échec
-                        return 1; // Échec de l'ouverture du fichier
-                    }*/
+                    
+                    // int fd = open(parsing->no_texture_value, O_RDONLY);
+                    // if (fd < 0 || !parsing->no_texture_value) 
+                    // {
+                    //     free(parsing->no_texture_value);
+                    //     printf("Error: Failed to open the file\n");
+                    //     return 1;
+                    // }
+                    /*if (open(parsing->no_texture_value, O_RDONLY) < 0)*/
                     return 0;
                 }
             } 
@@ -536,30 +529,37 @@ int parsing_textures(char **text_file, t_parsing *parsing)
 	return (0);
 }
 
-/*manque prefixe s ??? -> fonction qui sert a rien finalement
-int check_map_prefixes(char **text_file) 
-{
-    int i = 0;
-    int found = 0;  // Utilisez une variable pour suivre si une correspondance a été trouvée
+// manque prefixe s ??? -> fonction qui sert a rien finalement
+// int check_map_prefixes(char **text_file) 
+// {
+//     int i = 0;
+//     int found = 0;  // Utilisez une variable pour suivre si une correspondance a été trouvée
     
-    while (text_file[i]) 
-    {
-        //ne comprends pas les espaces, attention
-        if (strncmp(text_file[i], "NO", 2) == 0)
-            found++;
-        else if (strncmp(text_file[i], "SO", 2) == 0)
-            found++;
-        else if (strncmp(text_file[i], "WE", 2) == 0) 
-            found++;
-        else if (strncmp(text_file[i], "EA", 2) == 0) 
-            found++;
-        i++;
-    }
-    if (found == 4) 
-            return 0;
-    else 
-    {
-        printf("Error : the map prefixes are not good\n");
-        return 1;
-    }
-}*/
+//     while (text_file[i]) 
+//     {
+//         //ne comprends pas les espaces, attention
+//         if (strncmp(text_file[i], "NO", 2) == 0)
+//             found++;
+//         else if (strncmp(text_file[i], "SO", 2) == 0)
+//             found++;
+//         else if (strncmp(text_file[i], "WE", 2) == 0) 
+//             found++;
+//         else if (strncmp(text_file[i], "EA", 2) == 0) 
+//             found++;
+//         else if (strncmp(text_file[i], "S ", 2) == 0) 
+//             found++;
+//         else if (strncmp(text_file[i], "F ", 2) == 0) 
+//             found++;
+//          else if (strncmp(text_file[i], "C ", 2) == 0) 
+//             found++;    
+//         i++;
+//     }
+//     printf("ici = %d\n", found);
+//     if (found == 7)
+//             return 0;
+//     else 
+//     {
+//         printf("Error : the map prefixes are not good\n");
+//         return 1;
+//     }
+// }

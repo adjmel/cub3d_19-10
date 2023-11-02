@@ -3,7 +3,7 @@
 //pour voir si la map a des caracteres correctes
 int correct_number(t_parsing *parsing) 
 {
-    char *player_chars = "NSEWO";
+    char *player_chars = "NSEW";
 
     int num_lines = 0;
     int start = parsing->start_map;
@@ -98,7 +98,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
             //printf("ici = %c\n", map[i][j]);
             if (map[i][j] == '0' || map[i][j] == '2' ||
             map[i][j] == 'N' || map[i][j] == 'S' ||
-            map[i][j] == 'E' || map[i][j] == 'W' || map[i][j] == 'O')
+            map[i][j] == 'E' || map[i][j] == 'W')
             {
                 //printf("je suis different = %c\n", map[i][j]);
                 if (check_wall(map, i, j) == 1)
@@ -136,7 +136,7 @@ int check_last_wall(t_parsing *parsing)
         if (map_line[j] != '1' && map_line[j] != ' ')
         {
             
-            printf("Error: Last wall is not closed = %c\n", map_line[j]);
+            printf("Error: Last wall is not closed\n");
             return 1;
         }
         j++;
@@ -148,11 +148,6 @@ int check_first_wall(t_parsing *parsing)
 {
     int i = parsing->start_map;
     char *map_line = parsing->map[i];
-
-    if (map_line == NULL) {
-        printf("Error:  is not closed\n");
-        return 1;
-    }
 
     int j = 0;
     while (map_line[j] != '\0')
@@ -252,7 +247,7 @@ int check_nbr_directions(t_parsing *parsing)
     while (parsing->map[start] != NULL) 
     {
         char *line = parsing->map[start];
-        char *destination_chars = "SWOE";
+        char *destination_chars = "SWE";
 
         size_t i = 0; // Utilisez size_t pour éviter l'erreur de signe
         while (i < strlen(destination_chars)) 
@@ -275,11 +270,11 @@ int check_nbr_directions(t_parsing *parsing)
         //num_lines++;
         start++;
     }
-    if (destination_count == 0)
-    {
-        printf("Error: There is no destination on the map\n");
-        return 1;
-    }
+    // if (destination_count == 0)
+    // {
+    //     printf("Error: There is no destination on the map\n");
+    //     return 1;
+    // }
     return 0;
 }
 

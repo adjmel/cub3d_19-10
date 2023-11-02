@@ -15,14 +15,21 @@
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 600
 
-#define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
-#define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
-#define MAX_MAP_SIZE_Y 24
+# define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
+# define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
+# define MAX_MAP_SIZE_Y 24
+
+//# define MAPLETTERS "CNOSOWEEA"
 
 typedef struct s_parsing
 {
-	/*texte du fichier .cub*/
-	char **text_file;
+	/*variables pour substitut GNL*/
+	int num_lines;
+    int *num_lines_ptr;
+	char buffer[MAX_LINE_LENGTH];
+	ssize_t bytes_read;
+	char current_char;
+    int line_index;
 
 	/*valeurs rgb du sol et plafond*/
 	int floor_value_1;
@@ -45,13 +52,12 @@ typedef struct s_parsing
 
 	/*map*/
 	char **map;
-	char **config_elements;
-
-	char **copied_map;
 	int map_height;
-
-	
 	int start_map;
+	char **copied_map;
+
+	/*elements de configuration*/
+	char **config_elements;
 
 	/*position x et y du player*/
 	//int

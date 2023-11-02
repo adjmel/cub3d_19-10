@@ -27,8 +27,8 @@ int check_config_elements(char **text_file, t_parsing *parsing)
           //  return (1);
         if (parsing_textures(text_file, parsing) == 1) //✅
             return (1);
-       // if (check_map_prefixes(text_file) == 1)
-          //  return (1);
+        // if (check_map_prefixes(text_file) == 1)
+        //     return (1);
     return 0;
 }
 

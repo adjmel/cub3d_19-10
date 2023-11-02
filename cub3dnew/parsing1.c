@@ -2,7 +2,7 @@
 
 void	init_struct(t_parsing	*parsing)
 {
-    parsing->text_file = NULL;
+    //parsing->text_file = NULL;
     
     // Initialisation des valeurs RGB dans la structure
     parsing->floor_value_1 = -1;  // Valeur par défaut -> mettre 0 ?
@@ -21,6 +21,7 @@ void	init_struct(t_parsing	*parsing)
 
     //init map
     parsing->map = NULL;
+    parsing->config_elements = NULL;
 	parsing->copied_map = NULL;
 	parsing->map_height = 0;
 
@@ -46,6 +47,10 @@ int parsing(char *file_cub3d_name)
             return 1;
         }
         // Vérifiez si parsing->text_file a été correctement initialisé
+
+        //printf("ici 2 = %s\n", parsing->map[15]);
+        //printf("ici 3 = %s\n", parsing->config_elements[5]);
+
         if (!parsing->map || !parsing->config_elements) 
         {
             printf("Error: struct is not properly initialized\n");

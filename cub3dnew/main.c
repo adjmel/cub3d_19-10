@@ -20,7 +20,10 @@ int    good_name_file_cub(int ac, char **av)//✅
 
     if (ac != 2) 
     {
-        printf("Error : insufficient number of arguments\n");
+        if (ac < 2)
+            printf("Error : insufficient number of arguments\n");
+        else
+            printf("Error : too much of arguments\n");
         return 1; // Quitte le programme avec un code d'erreur
     }
 
