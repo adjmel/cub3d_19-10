@@ -126,6 +126,7 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
         line_index++;  // Incrément de l'index
     }
    // Si aucune valeur RGB valide n'a été trouvée
+
     printf("Error : floor values are incorrect\n");
     return 1;
 }
@@ -270,7 +271,8 @@ int check_texture_value(char **text_file, char *name_texture)
     {
         if (strncmp(text_file[i], name_texture, 2) == 0) 
         {
-            if (already_present == 1) 
+            printf("ici = %s\n", text_file[i]);
+            if (already_present >= 1) 
             {
                 printf("Error: Structure '%s' appears more than once\n", name_texture);
                 exit(1);

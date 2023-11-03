@@ -46,6 +46,13 @@ int parsing(char *file_cub3d_name)
             printf("Error : text cannot be put into structure\n");
             return 1;
         }
+        
+        if (*parsing->num_lines_ptr == 0)
+            {
+                printf("Error : the file is empty\n");
+                return 1;
+            }
+
         // Vérifiez si parsing->text_file a été correctement initialisé
 
         //printf("ici 2 = %s\n", parsing->map[15]);

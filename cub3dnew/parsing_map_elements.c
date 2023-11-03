@@ -27,8 +27,8 @@ int correct_number(t_parsing *parsing)
                 continue;
             }
             // Vérifiez les espaces -> dernier lignes 
-            // + changer car space possibl au debut
-            if (current_char == ' ')
+            // + changer car space possible au debut
+            if (current_char == ' ' && current_char + 1 == '\n')
             {
                 printf("Error: Do not put spaces in the map\n");
                 return 1;
@@ -43,7 +43,7 @@ int correct_number(t_parsing *parsing)
                 }
             }
 
-            if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL)
+            if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL && current_char != ' ')
             {
                 printf("Error: %c is not a correct number\n", current_char);
                 return 1;
@@ -135,7 +135,6 @@ int check_last_wall(t_parsing *parsing)
         //printf("%c\n", map_line[j]);
         if (map_line[j] != '1' && map_line[j] != ' ')
         {
-            
             printf("Error: Last wall is not closed\n");
             return 1;
         }
@@ -148,8 +147,10 @@ int check_first_wall(t_parsing *parsing)
 {
     int i = parsing->start_map;
     char *map_line = parsing->map[i];
-
     int j = 0;
+    
+    if (!map_line)
+        return 1;
     while (map_line[j] != '\0')
     {
         if (map_line[j] != '1' && map_line[j] != ' ')
@@ -157,14 +158,14 @@ int check_first_wall(t_parsing *parsing)
             printf("Error: First wall is not closed\n");
             return 1;
         }
+        
         j++;
     }
     return 0;
 }
 
-
 int map_closed(t_parsing *parsing)
-{
+{            
     if (check_first_wall(parsing) == 1)
         return 1;
     if (check_last_wall(parsing) == 1)

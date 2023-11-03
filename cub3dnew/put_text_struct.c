@@ -119,6 +119,8 @@ void process_line(t_parsing *parsing, int *config_size, int *map_size)
         parsing->map[*parsing->num_lines_ptr] = strdup(parsing->buffer);
     }
     (*parsing->num_lines_ptr)++;
+
+
 }
 
 void    init_read_variables(t_parsing *parsing)
@@ -163,9 +165,7 @@ int put_text_struct(t_parsing *parsing)
         }
     }
     if (parsing->line_index > 0) 
-            process_line(parsing, &config_size, &map_size);
-
-    //printf("ici = %s\n", parsing->config_elements[5]);
+            process_line(parsing, &config_size, &map_size); 
 
     //close(fd);
     return 0;
