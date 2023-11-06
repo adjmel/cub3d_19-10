@@ -21,41 +21,41 @@ int check_map_section(t_parsing *parsing, int num_lines)
 {
     int i = 0;
     int sign_count = 0; // Initialisation du compteur de signes
-    int required_signs = 7; // Spécifiez le nombre de signes requis ici
 
     while (i < num_lines) 
     {
         char *line = parsing->config_elements[i];
-        int j = 0;
-
+         int j = 0;
         while (line[j] != '\0') 
-        {
-            if (strncmp(&line[j], "C ", 2) == 0 || 
-            strncmp(&line[j], "NO ", 3) == 0 ||
-            strncmp(&line[j], "SO ", 3) == 0 ||
-            strncmp(&line[j], "WE ", 3) == 0 ||
-            strncmp(&line[j], "EA ", 3) == 0 || 
-            strncmp(&line[j], "S ", 2) == 0 ||
-            strncmp(&line[j], "F ", 2) == 0 || 
-            strncmp(&line[j], "C ", 2) == 0)
+        {   
+            //strncmp(line, "NO ", 3) == 0 ||
+          if (strncmp(&line[j], "C ", 2) == 0 || 
+        strncmp(&line[j], "NO ", 3) == 0 ||
+        strncmp(&line[j], "SO ", 3) == 0 ||
+        strncmp(&line[j], "WE ", 3) == 0 ||
+        strncmp(&line[j], "EA ", 3) == 0 || 
+        strncmp(&line[j], "S ", 2) == 0 ||
+        strncmp(&line[j], "F ", 2) == 0)
             {
                 sign_count++; // Incrémentez le compteur si un des signes est trouvé
             }
+            // printf("-----> %d\n",sign_count);
+            //printf("line = %c\n", line[j + 1]);
+            //  printf("pc = %s\n",parsing->config_elements[7]);
+        if (sign_count == 7)
+        {
 
-            if (sign_count == required_signs) 
-            {
-                // Vous avez trouvé le nombre requis de signes, commencez la carte ici
-                int nb_ligne_vide = count_empty_lines_after(parsing->map, i, num_lines);
-                parsing->start_map = nb_ligne_vide + i + 1;
-            // printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
-            //printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
+        int nb_ligne_vide = count_empty_lines_after(parsing->map, i, num_lines);
+        parsing->start_map = nb_ligne_vide + i + 1;
+             //printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
+           // printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
             //printf("\n- element de config l5 = %s\n", parsing->config_elements[5]);
                 return 0; // Vous êtes sur la carte
-            }
-            
+        }
+
             j++;
         }
-        i++;
+        i++;  
     }
     return 1; // Vous n'avez pas trouvé le nombre requis de signes
 }
@@ -96,27 +96,30 @@ void resize_and_copy(char ***array, int current_size, int new_size)
     *array = new_array;
 }
 
+
 void process_line(t_parsing *parsing, int *config_size, int *map_size) 
 {
     parsing->buffer[parsing->line_index] = '\0';
-
     if (check_map_section(parsing, *parsing->num_lines_ptr) == 1) 
-    {
+    {   
+
         if (*parsing->num_lines_ptr >= *config_size) 
         {
             (*config_size) *= 2;
-            resize_and_copy(&parsing->config_elements, *parsing->num_lines_ptr, *config_size);
+            resize_and_copy(&parsing->config_elements, *parsing->num_lines_ptr, *config_size);   
         }
         parsing->config_elements[*parsing->num_lines_ptr] = strdup(parsing->buffer);
     } 
     else 
     {
+        
         if (*parsing->num_lines_ptr >= *map_size) 
         {
             (*map_size) *= 2;
             resize_and_copy(&parsing->map, *parsing->num_lines_ptr, *map_size);
         }
         parsing->map[*parsing->num_lines_ptr] = strdup(parsing->buffer);
+        //printf("2ph = %s\n", parsing->config_elements[*parsing->num_lines_ptr]);
     }
     (*parsing->num_lines_ptr)++;
 
@@ -133,6 +136,24 @@ void    init_read_variables(t_parsing *parsing)
     parsing->line_index = 0;
 }
 
+int check_too_much_elmts(char *str) 
+{
+    if (str == NULL) 
+        return 0; // La ligne n'existe pas
+
+    int i = 0;
+    while (str[i] != '\0') 
+    {
+        if (!isspace((unsigned char)str[i])) 
+        {
+            return 1; // La ligne contient autre chose que des espaces
+        }
+        i++;
+    }
+    return 0; // La ligne ne contient que des espaces ou est vide
+}
+
+
 int put_text_struct(t_parsing *parsing) 
 {
     int config_size = 10;
@@ -145,8 +166,17 @@ int put_text_struct(t_parsing *parsing)
     init_read_variables(parsing);
     parsing->map = (char **)malloc(config_size * sizeof(char *));
     parsing->config_elements = (char **)malloc(map_size * sizeof(char *));
+
     while (read_file(fd, &parsing->bytes_read, &parsing->current_char) != 0) 
     {
+       
+        if (check_too_much_elmts(parsing->map[7]) == 1)
+        {
+            fprintf(stderr, "Error : too many configuration elements\n");
+        //printf("Error : too many configuration elements\n");
+            return 1;
+        }
+
         if (parsing->current_char == '\n') 
         {
             process_line(parsing, &config_size, &map_size);
@@ -156,7 +186,6 @@ int put_text_struct(t_parsing *parsing)
         {
             parsing->buffer[parsing->line_index] = parsing->current_char;
             parsing->line_index++;
-            
         } 
         else 
         {
