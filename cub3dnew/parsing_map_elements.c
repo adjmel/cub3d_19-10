@@ -145,13 +145,14 @@ int check_last_wall(t_parsing *parsing)
 }
 
 int check_first_wall(t_parsing *parsing)
-{
+{ 
     int i = parsing->start_map;
     char *map_line = parsing->map[i];
 
     int j = 0;
     while (map_line[j] != '\0')
     {
+        
         if (map_line[j] != '1' && map_line[j] != ' ')
         {
             printf("Error: First wall is not closed\n");

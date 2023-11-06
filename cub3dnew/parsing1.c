@@ -47,9 +47,15 @@ int parsing(char *file_cub3d_name)
             return 1;
         }
         // Vérifiez si parsing->text_file a été correctement initialisé
-
+ 
         //printf("ici 2 = %s\n", parsing->map[15]);
         //printf("ici 3 = %s\n", parsing->config_elements[5]);
+
+        if (*parsing->num_lines_ptr == 0)
+            {
+                printf("Error : the file is empty\n");
+                return 1;
+            }
 
         if (!parsing->map || !parsing->config_elements) 
         {
@@ -57,11 +63,13 @@ int parsing(char *file_cub3d_name)
             return 1;
         }
         // printf("ici = %s\n", parsing->text_file[9]);
+      
         if (parsing_cub3d(parsing->config_elements, &data.parsing) == 1)
         {
             //faire mes frees si parsing errone
             return 1;
         }
+        
         close(fd); // Ferme le descripteur de fichier si terminé (a revoir si ok)
     } 
     else 

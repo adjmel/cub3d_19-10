@@ -7,7 +7,7 @@ int parsing_map_elements(char **text_file, t_parsing *parsing)
         if (correct_number(parsing) == 1) //✅
            return 1;
         if (map_closed(parsing) == 1) 
-            return 1;
+            return 1;       
         if (map_less_3_lines(parsing) == 1) //✅
             return 1;
         if (check_nbr_player(parsing) == 1) //✅
@@ -48,6 +48,7 @@ int parsing_cub3d(char **text_file, t_parsing *parsing)
 
     if (parsing_map_elements(&parsing->map[i], parsing) == 1)
        return (1);
+    
 
 return 0;
 }

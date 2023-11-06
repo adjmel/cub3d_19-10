@@ -70,14 +70,16 @@ int parsing_rgbs_sky(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         if (strncmp(text_file[line_index], "C ", 2) == 0) 
-        {
+        {                 
             int r;
             int g;
             int b;
             if (parse_rgb(text_file[line_index], &r, &g, &b) == 0) 
             {
+                  
                 if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
                 {
+                    
                     // Les valeurs RGB sont valides
                     parsing->sky_value_1 = r;
                     parsing->sky_value_2 = g;
@@ -87,14 +89,17 @@ int parsing_rgbs_sky(char **text_file, t_parsing *parsing)
                     //printf("3s = %d\n", parsing->sky_value_3);
                     return 0;  // Valeurs RGB valides trouvées
                 }
+                
             }
         }
         line_index++;  // Incrément de l'index
     }
+  
    // Si aucune valeur RGB valide n'a été trouvée
     printf("Error : sky values are incorrect\n");
     return 1;
 }
+
 
 int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
 {
@@ -110,6 +115,7 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
             int b;
             if (parse_rgb(text_file[line_index], &r, &g, &b) == 0) 
             {
+
                 if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
                 {
                     // Les valeurs RGB sont valides
@@ -130,8 +136,63 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
     return 1;
 }
 
+
+// int nbr_texture_value(t_parsing *parsing)
+// {
+//     int i = 0;
+//     int already_present = 0;
+//     while (parsing->config_elements[i] != NULL) 
+//     {
+//         if (strncmp(parsing->config_elements[i], "SO ", 2) == 0)
+//         {  
+//             if (already_present >= 1) 
+//             {
+//                 //printf("Error: Structure '%s' appears more than once\n", name_texture);
+//                 printf("Error: Structure appears more than once\n");
+//                 return 1;//exit(1);
+//             }
+//             already_present++;
+//         }
+//         i++;
+//     }
+// return 0;
+// }
+
+int nbr_texture_value(const char *prefix, t_parsing *parsing) 
+{
+    int i = 0;
+    int count = 0;
+    size_t prefix_length = strlen(prefix);
+
+    while (parsing->config_elements[i] != NULL) 
+    {
+        if (strncmp(parsing->config_elements[i], prefix, prefix_length) == 0) 
+        {
+            count++;
+            if (count > 1) 
+            {
+                printf("Error: Structure '%s' appears more than once\n", prefix);
+                return 1; // Structure trouvée plus d'une fois
+            }
+        }
+        i++;
+        
+    }
+    //printf("ici -------> %s\n", parsing->config_elements[i - 1]);
+    // printf("ici2 -------> %s\n", parsing->config_elements[7]);
+    return 0; // Structure unique
+}
+
+
 int parsing_rgbs(char **text_file, t_parsing *parsing) 
 {
+    // if (nbr_texture_value(parsing) == 1)
+    //     return 1;
+    if (nbr_texture_value("NO ", parsing) ||
+        nbr_texture_value("SO ", parsing) || nbr_texture_value("WE ", parsing) 
+    || nbr_texture_value("EA ", parsing) || nbr_texture_value("S ", parsing)
+    || nbr_texture_value("F ", parsing) || nbr_texture_value("C ", parsing))
+            return 1; 
     if (parsing_rgbs_floor(text_file, parsing) == 1)
         return 1;
     if (parsing_rgbs_sky(text_file, parsing) == 1)
@@ -261,24 +322,25 @@ int check_texture_value(char **text_file, char *name_texture)
     // Vérifie si le nom du fichier se termine par l'extension ".xpm"
     if (extension_compare(*text_file, ".xpm") == 1) 
     {
-        printf("Error: The file must have the .xpm extension\n");
+        printf("Error: The file must have only the .xpm extension\n");
         exit(1);
     }
 
-    int i = 0;
-    while (text_file[i] != NULL) 
-    {
-        if (strncmp(text_file[i], name_texture, 2) == 0) 
-        {
-            if (already_present == 1) 
-            {
-                printf("Error: Structure '%s' appears more than once\n", name_texture);
-                exit(1);
-            }
-            already_present++;
-        }
-        i++;
-    }
+    (void)name_texture;
+    // int i = 0;
+    // while (text_file[i] != NULL) 
+    // {
+    //     if (strncmp(text_file[i], name_texture, 2) == 0) 
+    //     {
+    //         if (already_present == 1) 
+    //         {
+    //             printf("Error: Structure '%s' appears more than once\n", name_texture);
+    //             exit(1);
+    //         }
+    //         already_present++;
+    //     }
+    //     i++;
+    // }
     return 0;
 }
 
@@ -483,7 +545,7 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
         {
             if (strncmp(&text_file[line_index][i], "NO", 2) == 0) 
             {
-                char *no = "NO";
+                char *no = "NO ";
                 if (check_texture_value(&text_file[line_index], no) == 0) 
                 {
                     i = i + 2; // Sauter "NO"
